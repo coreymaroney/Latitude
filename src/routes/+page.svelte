@@ -70,7 +70,7 @@
 			onclick={handleVideoClick}
 			onmousemove={handleCursor}
 		>
-			<source href={base} src="/f1.webm" type="video/webm" />
+			<source src={base + '/f1.webm'} type="video/webm" />
 			<track kind="captions" />
 		</video>
 	</div>
