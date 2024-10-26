@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { base } from '$app/paths';
 	import { fade } from 'svelte/transition';
 	import Logo from '$lib/logo.svelte';
 	import Play from '$lib/play.svelte';
@@ -69,7 +70,7 @@
 			onclick={handleVideoClick}
 			onmousemove={handleCursor}
 		>
-			<source src="/f1.webm" type="video/webm" />
+			<source href={base} src="/f1.webm" type="video/webm" />
 			<track kind="captions" />
 		</video>
 	</div>

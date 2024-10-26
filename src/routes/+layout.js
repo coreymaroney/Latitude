@@ -1,0 +1,1 @@
+export const prerender = true // Used for gh-pages
