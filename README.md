@@ -1,5 +1,5 @@
 # Take home assignment for Latitude
-Chris and Eugene, thank you for taking the time to check out my take-home! I completed this project as a web deployment using Svelte, and I've provided two methods of viewing the project. 
+Chris and Eugene, thank you for taking the time to check out my take-home! I completed this project as a desktop optimized web deployment using Svelte, and I've provided two methods of viewing the project. 
 
 1. This app is deployed live on https://coreymaroney.github.io/Latitude/
 
