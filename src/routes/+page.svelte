@@ -1,10 +1,9 @@
 <script lang="ts">
 	import { fade } from 'svelte/transition';
-	import Logo from '../lib/logo.svelte';
-	import Play from '../lib/play.svelte';
-	import Pause from '../lib/pause.svelte';
+	import Logo from '$lib/logo.svelte';
+	import Play from '$lib/play.svelte';
+	import Pause from '$lib/pause.svelte';
 
-	let video;
 	let time = $state(0);
 	let duration = $state(0);
 	let paused = $state(true);
@@ -23,13 +22,20 @@
 		return `${minutes}:${timestamp}`;
 	};
 
-	const handleMouseMove = (e) => {
+	const scrollIntoView = ({ target }) => {
+		const row = document.querySelector(target.getAttribute('data-cursor'));
+		if (!row) return;
+		row.scrollIntoView({
+			behavior: 'smooth'
+		});
+	};
+
+	const handleCursor = (e) => {
 		cursorLocation.x = e.clientX - 128;
 		cursorLocation.y = e.clientY - 128;
 	};
 
-	const handleMouseDown = (e) => {
-		console.log(video.getBoundingClientRect());
+	const handleVideoClick = (e) => {
 		cursorData.clickCount++;
 		cursorData.clickLocation.push({
 			click: cursorData.clickCount,
@@ -37,6 +43,8 @@
 			x: cursorLocation.x,
 			y: cursorLocation.y < 0 ? 0 : cursorLocation.y
 		});
+
+		scrollIntoView(e);
 	};
 
 	const togglePaused = () => {
@@ -44,22 +52,22 @@
 	};
 </script>
 
-<div class="ml-12 mt-12">
+<div class="ml-12 mt-6">
 	<Logo />
 </div>
 
-<div class="mx-32 mt-12">
+<div class="mx-32 mt-12 font-mono">
 	<div>
 		<video
 			class="rounded-2xl"
 			id="player"
 			playsinline
-			onmousemove={handleMouseMove}
-			onmousedown={handleMouseDown}
-			bind:this={video}
 			bind:currentTime={time}
 			bind:duration
 			bind:paused
+			data-cursor="#row"
+			onclick={handleVideoClick}
+			onmousemove={handleCursor}
 		>
 			<source src="/f1.webm" type="video/webm" />
 			<track kind="captions" />
@@ -69,7 +77,7 @@
 	<div class="flex flex-row pt-2 pb-4">
 		<button
 			onclick={togglePaused}
-			class="w-24 rounded inline-flex items-center align-middle p-2 text-white rounded-xl transition duration-200 ease-out opacity-75 hover:opacity-100 bg-gradient-to-r from-[#e62927] to-[#ba0086] hover:from-[#d2023d] hover:to-[#8510a0]"
+			class="w-24 rounded-full inline-flex items-center align-middle p-2 text-white rounded-xl transition duration-200 ease-out opacity-75 hover:opacity-100 bg-gradient-to-r from-[#e62927] to-[#ba0086] hover:from-[#d2023d] hover:to-[#8510a0]"
 		>
 			{#key paused}
 				{#if paused}
@@ -82,27 +90,30 @@
 		<span class="text-white content-center pl-2">{formatTime(time)} / {formatTime(duration)}</span>
 	</div>
 
-	<div class="flex justify-center">
-		<table
-			class="w-56 text-white rounded table-auto border-separate border-spacing-2 border border-slate-500"
-		>
-			<thead>
-				<tr class="w-56">
-					<th>Click</th>
-					<th>Timestamp</th>
-					<th>X</th>
-					<th>Y</th>
-				</tr>
-			</thead>
-			<tbody>
-				{#each Object.values(cursorData.clickLocation) as row}
-					<tr in:fade>
-						{#each Object.values(row) as cell}
-							<td>{cell}</td>
-						{/each}
+	<div class="flex justify-center mb-16">
+		{#if cursorData.clickCount}
+			<table
+				in:fade
+				class="w-56 text-white rounded table-auto border-separate border-double border-spacing-5 border border-slate-500"
+			>
+				<thead>
+					<tr class="">
+						<th>Click</th>
+						<th>Timestamp</th>
+						<th>X</th>
+						<th>Y</th>
 					</tr>
-				{/each}
-			</tbody>
-		</table>
+				</thead>
+				<tbody>
+					{#each Object.values(cursorData.clickLocation) as row}
+						<tr in:fade>
+							{#each Object.values(row) as cell}
+								<td id="row">{cell}</td>
+							{/each}
+						</tr>
+					{/each}
+				</tbody>
+			</table>
+		{/if}
 	</div>
 </div>
