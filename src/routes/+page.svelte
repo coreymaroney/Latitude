@@ -10,7 +10,7 @@
 
 	let cursorData = $state({
 		clickCount: 0,
-		clickLocation: [{ click: null, x: null, y: null }]
+		clickLocation: [{ click: null, time: null, x: null, y: null }]
 	});
 	let cursorLocation = $state({ x: 0, y: 0 });
 
