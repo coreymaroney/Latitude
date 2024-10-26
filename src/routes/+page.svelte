@@ -29,6 +29,7 @@
 	};
 
 	const handleMouseDown = (e) => {
+		console.log(video.getBoundingClientRect());
 		cursorData.clickCount++;
 		cursorData.clickLocation.push({
 			click: cursorData.clickCount,
@@ -36,7 +37,6 @@
 			x: cursorLocation.x,
 			y: cursorLocation.y < 0 ? 0 : cursorLocation.y
 		});
-		console.log($state.snapshot(cursorData));
 	};
 
 	const togglePaused = () => {
@@ -82,10 +82,12 @@
 		<span class="text-white content-center pl-2">{formatTime(time)} / {formatTime(duration)}</span>
 	</div>
 
-	<div class="">
-		<table class="text-white table-auto border-separate border-spacing-2 border border-slate-500">
+	<div class="flex justify-center">
+		<table
+			class="w-56 text-white rounded table-auto border-separate border-spacing-2 border border-slate-500"
+		>
 			<thead>
-				<tr>
+				<tr class="w-56">
 					<th>Click</th>
 					<th>Timestamp</th>
 					<th>X</th>
